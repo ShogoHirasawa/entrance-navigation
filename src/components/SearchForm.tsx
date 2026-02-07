@@ -18,7 +18,7 @@ export function SearchForm({
   const [suggestions, setSuggestions] = useState<Destination[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchFormRef = useRef<HTMLDivElement>(null);
 
   // Debounced search
