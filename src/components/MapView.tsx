@@ -9,7 +9,7 @@ interface MapViewProps {
   currentLocation: LatLng | null;
   entrancePoint: LatLng | null;
   onMapClick?: (destination: Destination) => void;
-  onRequestLocation: () => void;
+  onLocationUpdate: (location: LatLng) => void;
 }
 
 const SF_CENTER: [number, number] = [-122.4194, 37.7749];
@@ -22,7 +22,7 @@ export function MapView({
   currentLocation,
   entrancePoint,
   onMapClick,
-  onRequestLocation,
+  onLocationUpdate,
 }: MapViewProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -59,8 +59,16 @@ export function MapView({
     map.addControl(geolocateControl, "top-right");
     geolocateControlRef.current = geolocateControl;
 
-    // GeolocateControl manages its own state and display
-    // No need to sync with parent component
+    // Listen to geolocate event to update parent state
+    // This fires when the user's location is successfully obtained
+    geolocateControl.on("geolocate", (e: any) => {
+      const location: LatLng = {
+        lat: e.coords.latitude,
+        lng: e.coords.longitude,
+      };
+      // Update parent component's currentLocation state
+      onLocationUpdate(location);
+    });
 
     // Add 3D buildings layer when the map loads
     map.on("load", () => {
@@ -145,7 +153,7 @@ export function MapView({
       mapRef.current = null;
       geolocateControlRef.current = null;
     };
-  }, [mapboxToken, onRequestLocation]);
+  }, [mapboxToken, onLocationUpdate]);
 
   // Note: Current location marker is handled by GeolocateControl
   // No need for custom current location marker

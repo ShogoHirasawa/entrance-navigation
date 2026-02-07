@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { SearchForm } from "./components/SearchForm";
 import { MapView } from "./components/MapView";
 import { WelcomePopup } from "./components/WelcomePopup";
-import { useGeolocation } from "./hooks/useGeolocation";
 import { fetchEntrancePoint } from "./lib/naurt";
 import { LatLng, Destination, EntrancePoint } from "./types";
 import "./App.css";
@@ -28,18 +27,10 @@ function App() {
     }
   }, []);
 
-  const handleGeolocationSuccess = useCallback((location: LatLng) => {
+  // Handle geolocation from Mapbox GeolocateControl
+  const handleLocationUpdate = useCallback((location: LatLng) => {
     setCurrentLocation(location);
   }, []);
-
-  const handleGeolocationError = useCallback((error: string) => {
-    console.error("Geolocation error:", error);
-  }, []);
-
-  const { requestLocation } = useGeolocation({
-    onSuccess: handleGeolocationSuccess,
-    onError: handleGeolocationError,
-  });
 
   // Fetch entrance point when destination changes
   useEffect(() => {
@@ -97,7 +88,7 @@ function App() {
         currentLocation={currentLocation}
         entrancePoint={entrancePoint?.location ?? null}
         onMapClick={handleSelectDestination}
-        onRequestLocation={requestLocation}
+        onLocationUpdate={handleLocationUpdate}
       />
     </div>
   );
