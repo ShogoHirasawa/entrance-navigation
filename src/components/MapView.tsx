@@ -179,7 +179,7 @@ export function MapView({
       img.style.width = "40px";
       img.style.height = "40px";
       img.style.display = "block";
-      
+
       el.appendChild(img);
 
       const marker = new mapboxgl.Marker(el)
