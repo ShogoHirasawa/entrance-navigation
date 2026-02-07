@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { SearchForm } from "./components/SearchForm";
 import { MapView } from "./components/MapView";
 import { WelcomePopup } from "./components/WelcomePopup";
@@ -28,13 +28,17 @@ function App() {
     }
   }, []);
 
+  const handleGeolocationSuccess = useCallback((location: LatLng) => {
+    setCurrentLocation(location);
+  }, []);
+
+  const handleGeolocationError = useCallback((error: string) => {
+    console.error("Geolocation error:", error);
+  }, []);
+
   const { requestLocation } = useGeolocation({
-    onSuccess: (location) => {
-      setCurrentLocation(location);
-    },
-    onError: (error) => {
-      console.error("Geolocation error:", error);
-    },
+    onSuccess: handleGeolocationSuccess,
+    onError: handleGeolocationError,
   });
 
   // Fetch entrance point when destination changes
@@ -64,7 +68,8 @@ function App() {
     }
 
     updateEntrance();
-  }, [destination, currentLocation]);
+    // currentLocationを依存配列から削除 - destinationが変わった時だけ実行
+  }, [destination]);
 
   const handleSelectDestination = (dest: Destination) => {
     setDestination(dest);

@@ -59,12 +59,8 @@ export function MapView({
     map.addControl(geolocateControl, "top-right");
     geolocateControlRef.current = geolocateControl;
 
-    // Listen to geolocate events to update current location state
-    geolocateControl.on("geolocate", () => {
-      onRequestLocation();
-      // The GeolocateControl will handle displaying the user's location
-      // We just need to notify the parent component
-    });
+    // GeolocateControl manages its own state and display
+    // No need to sync with parent component
 
     // Add 3D buildings layer when the map loads
     map.on("load", () => {
@@ -110,11 +106,6 @@ export function MapView({
           labelLayerId
         );
       }
-
-      // Auto-trigger geolocation on first load
-      setTimeout(() => {
-        geolocateControl.trigger();
-      }, 500);
     });
 
     // Handle map clicks to set destination
