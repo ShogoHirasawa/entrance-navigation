@@ -1,0 +1,60 @@
+.map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Make Mapbox logo smaller */
+.mapboxgl-ctrl-logo {
+  width: 50px !important;
+  height: 15px !important;
+  margin: 0 0 2px 2px !important;
+}
+
+/* Make attribution text smaller */
+.mapboxgl-ctrl-attrib {
+  font-size: 8px !important;
+  padding: 0 2px !important;
+  margin: 0 !important;
+}
+
+.marker {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.marker-current {
+  background-color: #4285f4; /* Blue */
+}
+
+.marker-destination {
+  background-color: #ea4335; /* Red */
+}
+
+.marker-entrance {
+  background-color: #34a853; /* Green */
+}
+
+.marker-entrance-icon {
+  cursor: pointer;
+  /* Ensure no default styles are applied */
+  width: auto;
+  height: auto;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.marker-entrance-icon img {
+  pointer-events: none;
+  display: block;
+  /* Add subtle shadow to icon itself for better visibility */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
