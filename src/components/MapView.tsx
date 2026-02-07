@@ -110,6 +110,11 @@ export function MapView({
           labelLayerId
         );
       }
+
+      // Auto-trigger geolocation on first load
+      setTimeout(() => {
+        geolocateControl.trigger();
+      }, 500);
     });
 
     // Handle map clicks to set destination
@@ -169,7 +174,7 @@ export function MapView({
       
       // Create image element for custom entrance icon
       const img = document.createElement("img");
-      img.src = "/icons/entrance-icon.png";
+      img.src = `${import.meta.env.BASE_URL}icons/entrance-icon.png`;
       img.alt = "Entrance";
       img.style.width = "40px";
       img.style.height = "40px";
