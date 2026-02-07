@@ -82,10 +82,13 @@ export function SearchForm({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && suggestions.length > 0) {
-      // Select the first suggestion when Enter is pressed
+    if (e.key === "Enter") {
+      // Prevent form submission/page reload on Enter
       e.preventDefault();
-      handleSelectSuggestion(suggestions[0]);
+      if (suggestions.length > 0) {
+        // Select the first suggestion when Enter is pressed
+        handleSelectSuggestion(suggestions[0]);
+      }
     }
   };
 
