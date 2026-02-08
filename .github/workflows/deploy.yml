@@ -35,6 +35,7 @@ jobs:
         env:
           VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
           VITE_NAURT_API_KEY: ${{ secrets.VITE_NAURT_API_KEY }}
+          VITE_GOOGLE_PLACES_API_KEY: ${{ secrets.VITE_GOOGLE_PLACES_API_KEY }}
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
