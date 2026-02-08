@@ -1,12 +1,9 @@
 import { LatLng, EntrancePoint } from "../types";
+import { MAPBOX_TOKEN } from "./config";
 
 // Mapbox Geocoding v6 endpoint
 const GEOCODING_V6_ENDPOINT =
   "https://api.mapbox.com/search/geocode/v6/forward";
-
-const MAPBOX_TOKEN =
-  import.meta.env.VITE_MAPBOX_ACCESS_TOKEN ??
-  "pk.eyJ1Ijoic2hvZ29oaXJhc2F3YSIsImEiOiJjazFhbzVrMG0yNmxjM2xuaTBmM3h0dW4wIn0.Bxjy09jy_cwOQVexF1xBfg";
 
 // v6 response types
 interface MapboxV6RoutablePoint {
@@ -47,7 +44,7 @@ export async function fetchEntrancePoint(params: {
   origin?: LatLng;
   destinationCoords?: LatLng;
 }): Promise<EntrancePoint | null> {
-  const { address, destinationCoords } = params;
+  const { address, origin, destinationCoords } = params;
 
   if (!address) {
     return destinationCoords ? { location: destinationCoords } : null;
@@ -62,12 +59,10 @@ export async function fetchEntrancePoint(params: {
       entrances: "true",
     });
 
-    // Add proximity bias if we have destination coordinates
-    if (destinationCoords) {
-      queryParams.set(
-        "proximity",
-        `${destinationCoords.lng},${destinationCoords.lat}`
-      );
+    // Add proximity bias: prefer destinationCoords, fallback to origin
+    const proximity = destinationCoords ?? origin;
+    if (proximity) {
+      queryParams.set("proximity", `${proximity.lng},${proximity.lat}`);
     }
 
     const url = `${GEOCODING_V6_ENDPOINT}?${queryParams.toString()}`;
@@ -93,11 +88,6 @@ export async function fetchEntrancePoint(params: {
       const entrance = routable_points.find((p) => p.name === "entrance");
 
       if (entrance) {
-        console.log(
-          `Mapbox entrance found (quality: ${entrance.quality ?? "unknown"}):`,
-          entrance.latitude,
-          entrance.longitude
-        );
         return {
           location: {
             lat: entrance.latitude,
