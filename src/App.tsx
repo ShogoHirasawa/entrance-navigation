@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { SearchForm } from "./components/SearchForm";
 import { MapView } from "./components/MapView";
 import { WelcomePopup } from "./components/WelcomePopup";
-import { fetchEntrancePoint } from "./lib/naurt";
+// Mapbox Geocoding v6 entrance (replaces Naurt for testing)
+import { fetchEntrancePoint } from "./lib/mapbox-entrance";
 import { LatLng, Destination, EntrancePoint } from "./types";
 import "./App.css";
 
