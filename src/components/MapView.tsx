@@ -211,8 +211,11 @@ export function MapView({
             bounds.extend(coord);
           });
 
+          // Use smaller padding on mobile screens
+          const isMobile = window.innerWidth < 768;
+          const pad = isMobile ? 40 : 80;
           map.fitBounds(bounds, {
-            padding: { top: 80, bottom: 80, left: 80, right: 80 },
+            padding: { top: pad, bottom: pad, left: pad, right: pad },
             maxZoom: 16,
           });
         } catch (error) {

@@ -79,13 +79,23 @@
 
 @media (max-width: 767px) {
   .suggestions-list {
-    max-height: calc(100vh - 80px);
+    max-height: calc(100dvh - 80px);
+    max-height: calc(100vh - 80px); /* Fallback */
+  }
+}
+
+@supports (max-height: 100dvh) {
+  @media (max-width: 767px) {
+    .suggestions-list {
+      max-height: calc(100dvh - 80px);
+    }
   }
 }
 
 @media (max-width: 480px) {
   .suggestions-list {
-    max-height: calc(100vh - 70px);
+    max-height: calc(100dvh - 70px);
+    max-height: calc(100vh - 70px); /* Fallback */
     font-size: 14px;
   }
   
