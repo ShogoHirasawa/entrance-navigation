@@ -7,12 +7,14 @@ interface SearchFormProps {
   onSelectDestination: (destination: Destination) => void;
   isLoading: boolean;
   mapboxToken: string;
+  destination: Destination | null;
 }
 
 export function SearchForm({
   onSelectDestination,
   isLoading,
   mapboxToken,
+  destination,
 }: SearchFormProps) {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Destination[]>([]);
@@ -20,11 +22,19 @@ export function SearchForm({
   const [showSuggestions, setShowSuggestions] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchFormRef = useRef<HTMLDivElement>(null);
+  // Flag to skip search when a suggestion was just selected
+  const justSelectedRef = useRef(false);
 
   // Debounced search
   useEffect(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
+    }
+
+    // Skip search if a suggestion was just selected (query changed to destination name)
+    if (justSelectedRef.current) {
+      justSelectedRef.current = false;
+      return;
     }
 
     if (!query.trim()) {
@@ -38,7 +48,6 @@ export function SearchForm({
     timeoutRef.current = setTimeout(async () => {
       try {
         const results = await searchPlaces(query, mapboxToken);
-        console.log(`✓ Found ${results.length} results for "${query}"`);
         setSuggestions(results);
         setShowSuggestions(results.length > 0);
       } catch (error) {
@@ -56,6 +65,16 @@ export function SearchForm({
       }
     };
   }, [query, mapboxToken]);
+
+  // When destination changes externally (e.g., map click), update query and close suggestions
+  useEffect(() => {
+    if (destination) {
+      justSelectedRef.current = true;
+      setQuery(destination.name);
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  }, [destination]);
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -75,6 +94,8 @@ export function SearchForm({
   }, []);
 
   const handleSelectSuggestion = (destination: Destination) => {
+    // Prevent the query change from re-triggering search
+    justSelectedRef.current = true;
     setQuery(destination.name);
     setSuggestions([]);
     setShowSuggestions(false);
