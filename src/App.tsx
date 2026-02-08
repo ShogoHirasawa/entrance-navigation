@@ -17,9 +17,9 @@ function App() {
   const [isFetchingEntrance, setIsFetchingEntrance] = useState(false);
   const [showWelcomePopup, setShowWelcomePopup] = useState(false);
 
-  // Check if welcome popup should be shown
+  // Show welcome popup once per session (sessionStorage resets on tab close)
   useEffect(() => {
-    const hasSeenWelcome = localStorage.getItem(WELCOME_POPUP_KEY);
+    const hasSeenWelcome = sessionStorage.getItem(WELCOME_POPUP_KEY);
     if (!hasSeenWelcome) {
       setShowWelcomePopup(true);
     }
@@ -66,7 +66,7 @@ function App() {
 
   const handleCloseWelcome = () => {
     setShowWelcomePopup(false);
-    localStorage.setItem(WELCOME_POPUP_KEY, "true");
+    sessionStorage.setItem(WELCOME_POPUP_KEY, "true");
   };
 
   return (
@@ -78,6 +78,7 @@ function App() {
           onSelectDestination={handleSelectDestination}
           isLoading={isFetchingEntrance}
           mapboxToken={MAPBOX_TOKEN}
+          destination={destination}
         />
       </div>
 
