@@ -2,13 +2,11 @@ import { useState, useEffect, useCallback } from "react";
 import { SearchForm } from "./components/SearchForm";
 import { MapView } from "./components/MapView";
 import { WelcomePopup } from "./components/WelcomePopup";
-import { fetchEntrancePoint } from "./lib/naurt";
+// Mapbox Geocoding v6 entrance (replaces Naurt for testing)
+import { fetchEntrancePoint } from "./lib/mapbox-entrance";
 import { LatLng, Destination, EntrancePoint } from "./types";
+import { MAPBOX_TOKEN } from "./lib/config";
 import "./App.css";
-
-const MAPBOX_TOKEN =
-  import.meta.env.VITE_MAPBOX_ACCESS_TOKEN ??
-  "pk.eyJ1Ijoic2hvZ29oaXJhc2F3YSIsImEiOiJjazFhbzVrMG0yNmxjM2xuaTBmM3h0dW4wIn0.Bxjy09jy_cwOQVexF1xBfg";
 
 const WELCOME_POPUP_KEY = "entrance-navigator-welcome-shown";
 
