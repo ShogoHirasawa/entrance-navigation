@@ -2,8 +2,16 @@
   position: absolute;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
+}
+
+/* Prevent map controls from overflowing on mobile */
+.mapboxgl-ctrl-top-right {
+  max-width: 100%;
 }
 
 /* Make Mapbox logo smaller */
